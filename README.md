@@ -136,3 +136,51 @@ cd BOSTR-RAGBOT/fe
 Start the frontend development server:
 
 npm run start:frontend
+
+🦙 Ollama Setup (Mistral and Llama 2 13B Support)
+
+If you want to use Ollama Mistral or Ollama Llama 2 13B with this project, you need to install Ollama and download the required models.
+1. Install Ollama
+
+If you have never installed Ollama before:
+
+    Go to the Ollama website and download the installer for your operating system (Windows, macOS, or Linux).
+
+    Follow the installation instructions on the site to set up Ollama.
+
+Alternatively, for Mac you can use Homebrew:
+
+brew install ollama
+
+For Linux (Ubuntu/Debian):
+
+curl -fsSL https://ollama.com/install.sh | sh
+
+For Windows:
+Just use the Windows installer and follow the prompts.
+
+After installing, make sure the Ollama server is running:
+
+ollama serve
+
+2. Download the Required Models
+
+You need to download the models you want to use:
+
+    mistral:latest
+
+    llama2:13b
+
+Open a terminal and run the following commands:
+
+ollama pull mistral:latest
+ollama pull llama2:13b
+
+Wait for the downloads to complete.
+
+    Note: The models can be large and may take a while to download depending on your internet speed.
+
+3. Using the Models
+
+Once downloaded, Ollama will automatically make these models available for your application.
+If you encounter issues or need to switch models, check Ollama's documentation or restart the Ollama server.
