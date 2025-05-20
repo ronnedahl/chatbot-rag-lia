@@ -101,6 +101,41 @@ BE/utils/delete-collection.js
     Tip:
     Replace your-filename.json with the actual name of your downloaded JSON file, e.g., bostr-chatbot-firebase-adminsdk-xxxxxx.json.
 
+🔑 Firebase Authentication Setup
+
+To use authentication features in this project, you must enable Firebase Authentication in your Firebase Console and create at least one user account.
+1. Enable Authentication in Firebase
+
+    Go to the Firebase Console.
+
+    Select your project.
+
+    In the left sidebar, click on "Authentication".
+
+    Click on "Get started" if you haven’t already enabled Authentication.
+
+    Go to the "Sign-in method" tab.
+
+    Enable "Email/Password" authentication:
+
+        Click on "Email/Password".
+
+        Click the "Enable" toggle.
+
+        Click "Save".
+
+2. Add a User
+
+To test your application, you need at least one user registered:
+
+    While still in the Authentication section, go to the "Users" tab.
+
+    Click "Add user".
+
+    Enter an email address and a password for your new user.
+
+    Click "Add user" to create the account.
+
 🏃 Running the Application
 
 You have several options to start the BOSTR-RAGBOT:
