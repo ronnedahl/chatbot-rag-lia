@@ -1,0 +1,93 @@
+
+services:
+  frontend:
+    build:
+      context: ./FE
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./frontend.env
+    networks:
+      - app-network
+    restart: unless-stopped
+    depends_on:
+      backend: # Du kan fortfarande ha depends_on, men condition: service_healthy blir mindre meningsfullt
+        # condition: service_started # Om du bara vill vänta tills backend-containern har startat
+        condition: service_healthy # Behöver fortfarande en healthcheck för att fungera väl
+    healthcheck:
+      # Försök att nå rot-URL. Om detta inte är tillförlitligt, se TCP-alternativet nedan.
+      test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s # Ge Next.js tid att bygga/starta
+    # Alternativ TCP-portkontroll för frontend (om curl till / inte är bra):
+    # healthcheck:
+    #   test: ["CMD", "nc", "-z", "localhost", "3000"] # Kräver att 'netcat' (nc) finns i containern
+    #   interval: 20s
+    #   timeout: 5s
+    #   retries: 5
+    #   start_period: 60s
+
+  backend:
+    build:
+      context: ./BE
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    env_file:
+      - ./backend.env
+    networks:
+      - app-network
+    restart: unless-stopped
+    depends_on:
+      ollama:
+        condition: service_healthy
+    healthcheck:
+      # TCP-portkontroll: Kontrollerar om backend lyssnar på port 3003.
+      # Kräver att 'netcat' (nc) finns i Node.js Alpine-imagen (det gör det oftast)
+      # eller så kan du installera det: RUN apk add --no-cache netcat-openbsd
+      test: ["CMD-SHELL", "nc -z localhost 3003 || exit 1"] # nc finns i node:alpine
+      interval: 20s # Kan vara tätare än en HTTP-check
+      timeout: 5s
+      retries: 5
+      start_period: 40s # Ge servern tid att binda till porten
+    # Om du har en annan enkel GET-endpoint i din backend, t.ex. "/":
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl -f http://localhost:3003/ || exit 1"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 60s
+
+  ollama:
+    image: ollama/ollama
+    container_name: ollama_service
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - app-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  ollama_data:

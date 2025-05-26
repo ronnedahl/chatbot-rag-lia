@@ -1,0 +1,26 @@
+import { OpenAI } from 'openai';
+import { OpenAIEmbeddings } from '@langchain/openai';
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+export const embeddings = new OpenAIEmbeddings({
+  openAIApiKey: process.env.OPENAI_API_KEY,
+  modelName: 'text-embedding-3-small',
+});
+
+export async function generateResponse(prompt: string): Promise<string> {
+  try {
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.1,
+    });
+
+    return completion.choices[0].message.content || '';
+  } catch (error) {
+    console.error('Error generating response from OpenAI:', error);
+    throw error;
+  }
+}
