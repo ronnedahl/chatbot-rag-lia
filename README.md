@@ -136,7 +136,7 @@ To test your application, you need at least one user registered:
 
     Click "Add user" to create the account.
 
-🏃 Running the Application
+ Running the Application
 
 You have several options to start the BOSTR-RAGBOT:
 🌐 Run Frontend and Backend Simultaneously (Local Development)
@@ -162,7 +162,7 @@ Start the backend server:
 
     npm run start:backend
 
-🎨 Run Frontend Only
+ Run Frontend Only
 
     Navigate to the frontend directory:
 
@@ -219,3 +219,61 @@ Wait for the downloads to complete.
 
 Once downloaded, Ollama will automatically make these models available for your application.
 If you encounter issues or need to switch models, check Ollama's documentation or restart the Ollama server.
+
+---
+
+##  Supercharge Your Bot: Enable Advanced Web Search!
+
+Want to give your bot the power to access real-time information from the web? By switching to the `websearch-ragbot` branch in *this* repository and integrating a dedicated backend API, you can significantly enhance its capabilities.
+
+This setup allows your bot to perform live web searches to fetch the latest data, making its responses more accurate, relevant, and up-to-date.
+
+**Here’s how to enable this advanced functionality:**
+
+### Step 1: Set Up the Web Search Backend API
+
+> [!IMPORTANT]
+> The web search feature relies on a separate backend API. You **must** clone, install, and run this API first.
+
+1.  **Clone the Backend API Repository:**
+    ```bash
+    git clone https://github.com/ronnedahl/chatbot-rag-lia-websearch.git
+    ```
+
+2.  **Navigate into its directory:**
+    ```bash
+    cd chatbot-rag-lia-websearch
+    ```
+
+3.  **Install and Run the API:**
+    Carefully follow the instructions in the `README.md` file within the `chatbot-rag-lia-websearch` repository to install its dependencies and start the API server.
+
+    > [!NOTE]
+    > Ensure this backend API server is **running** before proceeding to the next step. It typically runs on a local port like `http://127.0.0.1:8000` or `http://localhost:5000` (check its README for the exact port).
+
+### Step 2: Configure This Project (Your Current Repository)
+
+1.  **Switch to the `websearch-ragbot` Branch:**
+    In your current project's terminal (the one for `api-bstr-new-python` or similar):
+    ```bash
+    git checkout websearch-ragbot
+    ```
+    This branch contains the frontend code configured to communicate with the web search API.
+
+2.  **Navigate to the Frontend Directory:**
+    If your project has a specific frontend folder (often named `FE`, `frontend`, `client`, or `ui`):
+    ```bash
+    cd FE
+    ```
+    *(Adjust `FE` if your frontend directory has a different name. If your `npm run start:all` command is run from the root, you can skip this `cd`.)*
+
+3.  **Start Your Application:**
+    Run the command to start your application, which should now include the web search integration:
+    ```bash
+    npm run start:all
+    ```
+
+**What to Expect:**
+Once both the backend API and this project (on the `websearch-ragbot` branch) are running, your bot should now have web search capabilities enabled! Test it out by asking questions that would benefit from real-time web information.
+
+---
